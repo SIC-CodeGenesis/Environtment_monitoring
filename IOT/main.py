@@ -14,9 +14,31 @@ WIFI_PASSWORD = "ciumdulu"
 TOKEN = "BBUS-XvBqJJbY25P5kLxo9D42Ir4dhwjEF1"
 
 def did_receive_callback(topic, message):
+    """
+    Fungsi callback yang dipicu ketika sebuah pesan diterima pada topik tertentu.
+
+    Argumen:
+        topic (str): Topik di mana pesan diterima.
+        message (str): Isi pesan yang diterima.
+
+    Mengembalikan:
+        None
+    """
     print('\n\nData Received! \ntopic = {0}, message = {1}'.format(topic, message))
 
 def create_json_data(temperature, humidity, light, motion):
+    """
+    Membuat dictionary yang kompatibel dengan JSON berisi data lingkungan.
+
+    Argumen:
+        temperature (float): Nilai suhu.
+        humidity (float): Nilai kelembaban.
+        light (float): Nilai intensitas cahaya.
+        motion (bool): Nilai deteksi gerakan.
+
+    Mengembalikan:
+        dict: Sebuah dictionary yang berisi data lingkungan.
+    """
     data = {
         "temperature": temperature,
         "humidity": humidity,
@@ -26,12 +48,31 @@ def create_json_data(temperature, humidity, light, motion):
     return data
 
 def send_data_to_ubidots(data):
+    """
+    Mengirim data ke API Ubidots.
+
+    Argumen:
+        data (dict): Data yang akan dikirim ke Ubidots dalam format JSON.
+
+    Mengembalikan:
+        None
+
+    Mencetak:
+        Teks respons dari API Ubidots.
+    """
     url = "http://industrial.api.ubidots.com/api/v1.6/devices/" + DEVICE_ID
     headers = {"Content-Type": "application/json", "X-Auth-Token": TOKEN}
     response = requests.post(url, json=data, headers=headers)
     print("UBIDOTS Response:", response.text)
     
 def send_data_to_api(data):
+    """
+        Mengirim data sensor ke API.
+    Args:
+        data (dict): Data sensor yang akan dikirim dalam format JSON.
+    Returns:
+        None
+    """
     url = "http://amaw.eu.org/sensor"
     response = requests.post(url, json=data)
     print("API Response:", response.text)
@@ -116,4 +157,4 @@ while True:
     led_ijo.value(1)
     time.sleep(2)  # Tunggu 2 detik sebelum membaca lagi
     led_ijo.value(0)
-    print("")
+    print("")
