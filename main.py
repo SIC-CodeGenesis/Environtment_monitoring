@@ -9,6 +9,10 @@ client = MongoClient(os.getenv('MONGO_URI'))
 db = client['environment_monitoring']
 collection = db['sensor']
 #************************** API Endpoints **************************
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({'status': 'Server is running'}), 200
+
 @app.route('/sensor', methods=['POST'])
 def sensor():
     try:
