@@ -17,17 +17,22 @@ def index():
 def sensor():
     try:
         data = request.get_json()
-        temperature = data.get('temperature',"")
-        humidity = data.get('humidity',"")
-        light = data.get('light',"")
+        temperature = data.get('temperature','')
+        humidity = data.get('humidity','')
+        light = data.get('light','')
         if (not temperature or not humidity or not light):
-            raise Exception("Invalid data")
+            raise Exception('Invalid data')
         # Insert data into MongoDB
         collection.insert_one(data)
 
         response = {
             'status': 'success',
-            'data_received': data
+            'data_received': {
+                'temperature': temperature,
+                'humidity': humidity,
+                'light': light,
+                'id': str(data['_id'])
+            }
         }
         return jsonify(response), 200
     except Exception as e:
@@ -39,4 +44,4 @@ def sensor():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=3000,debug=True)
+    app.run(host='0.0.0.0', port=3000,debug=True)
